@@ -1,17 +1,12 @@
 package service;
 
 public class Candidate {
-    private Integer id;
+    private transient Integer id;
     private String name;
     private String photo;
-    private Integer votes;
+    private transient int votes;
 
-    public Candidate(Integer id, String name, String photo, Integer votes) {
-        this.id = id;
-        this.name = name;
-        this.photo = photo;
-        this.votes = votes;
-    }
+
 
     public Integer getId() {
         return id;
@@ -45,4 +40,3 @@ public class Candidate {
         this.votes = votes;
     }
 }
-

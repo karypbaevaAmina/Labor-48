@@ -1,10 +1,33 @@
 package service;
 
+import server.Utils;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CandidatesDataModel {
+    private List<Candidate> candidates = new ArrayList<>();
+    private List<String> emailsOfVotedProfiles = new ArrayList<>();
+    private Candidate currentCandidate;
 
-    public List<Candidate> candidates;
+    public CandidatesDataModel() {
+        try {
+            this.candidates = Utils.getCandidatesFromFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Integer countId = 1;
+        for (Candidate candidate : candidates) {
+            candidate.setId(countId);
+            countId++;
+        }
+    }
+
+    public List<String> getEmailsOfVotedProfiles() {
+        return emailsOfVotedProfiles;
+    }
+
 
     public List<Candidate> getCandidates() {
         return candidates;
@@ -14,7 +37,11 @@ public class CandidatesDataModel {
         this.candidates = candidates;
     }
 
-    public CandidatesDataModel() {
-        this.candidates = FileService.readCandidates();
+    public Candidate getCurrentCandidate() {
+        return currentCandidate;
+    }
+
+    public void setCurrentCandidate(Candidate currentCandidate) {
+        this.currentCandidate = currentCandidate;
     }
 }

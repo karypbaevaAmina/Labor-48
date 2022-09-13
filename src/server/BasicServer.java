@@ -1,13 +1,13 @@
-package kz.attractor.java.server;
+package server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import kz.attractor.java.lesson44.Cookie;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class BasicServer {
@@ -22,6 +23,8 @@ public abstract class BasicServer {
     private final HttpServer server;
     // путь к каталогу с файлами, которые будет отдавать сервер по запросам клиентов
     private final String dataDir = "data";
+    private final static Configuration freemarker = initFreeMarker();
+
     private Map<String, RouteHandler> routes = new HashMap<>();
 
     protected BasicServer(String host, int port) throws IOException {
@@ -30,14 +33,16 @@ public abstract class BasicServer {
     }
 
     private static String makeKey(String method, String route) {
-        route = startsWithSlash(route);
+        route = ensureStartsWithSlash(route);
         return String.format("%s %s", method.toUpperCase(), route);
     }
 
-    private static String startsWithSlash(String route) {
-        if(route.startsWith("."))
+    private static String ensureStartsWithSlash(String route) {
+        if (route.startsWith(".")) {
             return route;
-        return  route.startsWith("/")? route:"/" + route;
+        }
+
+        return route.startsWith("/") ? route : "/" + route;
     }
 
     private static String makeKey(HttpExchange exchange) {
@@ -46,23 +51,20 @@ public abstract class BasicServer {
 
         if (path.endsWith("/") && path.length() > 1) {
             path = path.substring(0, path.length() - 1);
-
         }
-
-
 
         var index = path.lastIndexOf(".");
         var extOrPath = index != -1 ? path.substring(index).toLowerCase() : path;
 
         return makeKey(method, extOrPath);
     }
-    public String getContentType(HttpExchange exchange){
-        return  exchange.getResponseHeaders().getOrDefault("Content-Type", List.of(" ")).get(0);
-
-    }
 
     private static void setContentType(HttpExchange exchange, ContentType type) {
         exchange.getResponseHeaders().set("Content-Type", String.valueOf(type));
+    }
+
+    protected static String getContentType(HttpExchange exchange) {
+        return exchange.getRequestHeaders().getOrDefault("Content-Type", List.of("")).get(0);
     }
 
     private static HttpServer createServer(String host, int port) throws IOException {
@@ -88,7 +90,7 @@ public abstract class BasicServer {
         // эти обрабатывают запросы с указанными расширениями
         registerFileHandler(".css", ContentType.TEXT_CSS);
         registerFileHandler(".html", ContentType.TEXT_HTML);
-        registerFileHandler(".jpg", ContentType.IMAGE_JPEG);
+        registerFileHandler(".jpeg", ContentType.IMAGE_JPEG);
         registerFileHandler(".png", ContentType.IMAGE_PNG);
 
     }
@@ -101,9 +103,8 @@ public abstract class BasicServer {
         registerGenericHandler("GET", route, handler);
     }
 
-    protected final void registerPost(String route, RouteHandler handler){
+    protected final void registerPost(String route, RouteHandler handler) {
         registerGenericHandler("POST", route, handler);
-
     }
 
     protected final void registerFileHandler(String fileExt, ContentType type) {
@@ -113,16 +114,27 @@ public abstract class BasicServer {
     protected final Map<String, RouteHandler> getRoutes() {
         return routes;
     }
-    protected String getBody(HttpExchange exchange){
-        InputStream input = exchange.getRequestBody();
-        InputStreamReader isr = new InputStreamReader(input, StandardCharsets.UTF_8);
 
-        try(BufferedReader reader = new BufferedReader(isr)){
-            return  reader.lines().collect(Collectors.joining(""));
-        } catch (IOException e ){
+    protected String getCookies(HttpExchange exchange) {
+        return exchange.getRequestHeaders().getOrDefault("Cookie", List.of("")).get(0);
+    }
+
+    protected void setCookies(HttpExchange exchange, Cookie cookie) {
+        exchange.getResponseHeaders().add("Set-Cookie", cookie.toString());
+    }
+
+    protected final String getBody(HttpExchange exchange) {
+        InputStream inputStream = exchange.getRequestBody();
+        InputStreamReader isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+        try (BufferedReader reader = new BufferedReader(isr)) {
+            return reader.lines().collect(Collectors.joining(""));
+        }catch (IOException e) {
             e.printStackTrace();
         }
         return "";
+
+
     }
 
     protected final void sendFile(HttpExchange exchange, Path pathToFile, ContentType contentType) {
@@ -156,6 +168,11 @@ public abstract class BasicServer {
         }
     }
 
+    protected String getQueryParams(HttpExchange exchange) {
+        String query = exchange.getRequestURI().getQuery();
+        return Objects.nonNull(query) ? query : "";
+    }
+
     private void respond404(HttpExchange exchange) {
         try {
             var data = "404 Not found".getBytes();
@@ -180,16 +197,59 @@ public abstract class BasicServer {
         route.handle(exchange);
     }
 
+    protected void renderTemplate(HttpExchange exchange, String templateFile, Object dataModel) {
+        try {
+            // загружаем шаблон из файла по имени.
+            // шаблон должен находится по пути, указанном в конфигурации
+            Template temp = freemarker.getTemplate(templateFile);
+
+            // freemarker записывает преобразованный шаблон в объект класса writer
+            // а наш сервер отправляет клиенту массивы байт
+            // по этому нам надо сделать "мост" между этими двумя системами
+
+            // создаём поток который сохраняет всё, что в него будет записано в байтовый массив
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // создаём объект, который умеет писать в поток и который подходит для freemarker
+            try (OutputStreamWriter writer = new OutputStreamWriter(stream)) {
+
+                // обрабатываем шаблон заполняя его данными из модели
+                // и записываем результат в объект "записи"
+                temp.process(dataModel, writer);
+                writer.flush();
+
+                // получаем байтовый поток
+                var data = stream.toByteArray();
+
+                // отправляем результат клиенту
+                sendByteData(exchange, ResponseCodes.OK, ContentType.TEXT_HTML, data);
+            }
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Configuration initFreeMarker() {
+        try {
+            Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
+            // путь к каталогу в котором у нас хранятся шаблоны
+            // это может быть совершенно другой путь, чем тот, откуда сервер берёт файлы
+            // которые отправляет пользователю
+            cfg.setDirectoryForTemplateLoading(new File("data"));
+
+            // прочие стандартные настройки о них читать тут
+            // https://freemarker.apache.org/docs/pgui_quickstart_createconfiguration.html
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+            cfg.setLogTemplateExceptions(false);
+            cfg.setWrapUncheckedExceptions(true);
+            cfg.setFallbackOnNullLoopVariable(false);
+            return cfg;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public final void start() {
         server.start();
-    }
-
-    protected String getCookies(HttpExchange exchange){
-        return exchange.getRequestHeaders().getOrDefault("cookie", List.of("")).get(0);
-    }
-
-    protected void setCookie(HttpExchange exchange, Cookie cookie){
-        exchange.getResponseHeaders().add("Set-Cookie",cookie.toString());
-
     }
 }
