@@ -1,33 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbdb8d47-eaa9-4f9e-b612-bdef5d292e43" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/freemarker.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_8_9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Labor-48.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/candidates.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/profiles.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/wrongLogin.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/VoteMachine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/BasicServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/ContentType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/Cookie.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/ResponseCodes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/RouteHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/server/Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/Candidate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/CandidatesDataModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/Profile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/service/ProfileDataModel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vendor/freemarker.jar" afterDir="false" />
+    <list default="true" id="cbdb8d47-eaa9-4f9e-b612-bdef5d292e43" name="Changes" comment="labor-48">
+      <change afterPath="$PROJECT_DIR$/data/alreadyVoted.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,8 +78,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1662996122836</updated>
-      <workItem from="1662996125528" duration="14721000" />
+      <workItem from="1662996125528" duration="15479000" />
     </task>
+    <task id="LOCAL-00001" summary="labor-48">
+      <created>1663051687493</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1663051687493</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -120,6 +103,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="labor-48" />
+    <option name="LAST_COMMIT_MESSAGE" value="labor-48" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
