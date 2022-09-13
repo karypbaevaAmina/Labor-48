@@ -3,28 +3,46 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Who's winning?</title>
-    <link rel="stylesheet" href="css/candidates.css">
+    <title>Vote for us!</title>
+    <link rel="stylesheet" href="/candidates.css">
 </head>
 
 <body>
 <div class="container flex flex-col align-center">
-    <h1>Who's winning?</h1>
-    <main class="flex flex-wrap align-center">
-        <div class="card">
-            <div class="flex flex-col align-center" href="#">
-                <img src="./1.jpeg">
-                <p>Votes: 75%</p>
-            </div>
+    <h1>Vote for us</h1>
+
+    <main class="flex flex-wrap align-evenly">
+        <#assign totalVotes=emailsOfVotedProfiles?size/>
+        <#list candidates as candidate>
+        <#if candidate.top>
+        <div class="card" style="background-color: #B62E40;">
+            <div class="flex flex-col align-center" >
+                <img src="./${candidate.photo}">
+                <#assign votes=candidate.votes/>
+                <#if totalVotes == 0>
+                <p>${candidate.name} has 0% of all votes</p>
+                <#else>
+                <p>${candidate.name} has ${(candidate.votes/totalVotes * 100)?ceiling}% of all votes</p>
+            </#if>
         </div>
-        <div class="card">
-            <div class="flex flex-col align-center" href="#">
-                <img src="images/1.jpeg">
-                <p>Votes: 25%</p>
-            </div>
-        </div>
-        <a class="back flex align-center" href="/">back to main</a>
-    </main>
+</div>
+<#else>
+<div class="card">
+    <div class="flex flex-col align-center">
+        <img src="./${candidate.photo}">
+        <#assign votes=candidate.votes/>
+        <#if totalVotes == 0>
+        <p>${candidate.name} has 0% of all votes</p>
+        <#else>
+        <p>${candidate.name} has ${(candidate.votes/totalVotes * 100)?ceiling}% of all votes</p>
+    </#if>
+</div>
+</div>
+</#if>
+</#list>
+</main>
+<p>-------------------------------------------------------</p>
+<a class="back flex align-center" href="/">Back to main</a>
 </div>
 </body>
 

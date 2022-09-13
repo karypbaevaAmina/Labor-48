@@ -17,10 +17,15 @@
             <div class="flex flex-col align-center" href="#">
                 <img src="./${currentCandidate.photo}">
                 <p>Thank you for your vote!</p>
-                <div>Процентное соотношение: ${(votes/totalVotes * 100)}</div>
+                <div>Now I have ${(votes/totalVotes * 100)}% of all votes</div>
             </div>
         </div>
-        <a class="back flex align-center" href="/">back to main</a>
+        <div>
+            <a class="back flex align-center" href="/">back to main</a>
+            <p>-----------------------------------------------------</p>
+            <a class="back flex align-center" href="/votes">Show total votes</a>
+        </div>
+
     </main>
 </div>
 

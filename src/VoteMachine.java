@@ -12,6 +12,7 @@ import service.ProfileDataModel;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class VoteMachine extends BasicServer {
@@ -26,6 +27,21 @@ public class VoteMachine extends BasicServer {
         registerGet("/login", this::loginGetHandler);
         registerPost("/login", this::loginPostHandler);
         registerGet("/thankyou", this::thanksHandler);
+        registerGet("votes", this::totalVotesHandler);
+    }
+
+    private void totalVotesHandler(HttpExchange exchange) {
+        candidatesDataModel.getCandidates().sort(Comparator.comparingInt(Candidate::getVotes).reversed());
+        Candidate topCandidate = candidatesDataModel.getCandidates().get(0); // Установка победителя
+        if (topCandidate.getVotes() != 0){
+            topCandidate.setTop(true);// Установка победителя
+        }
+        candidatesDataModel.getCandidates().forEach(candidate -> {
+            if (topCandidate.getVotes().equals(topCandidate.getVotes()) && candidate.getVotes()!= 0) {
+                candidate.setTop(true);
+            }
+        });
+        renderTemplate(exchange, "/votes.html", candidatesDataModel);
     }
 
     private void thanksHandler(HttpExchange exchange) {
@@ -61,6 +77,7 @@ public class VoteMachine extends BasicServer {
     }
 
     private void voteHandler(HttpExchange exchange) {
+        candidatesDataModel.getCandidates().sort(Comparator.comparingInt(Candidate::getId));
         var parsedBody = Utils.parseUrlEncoded(getBody(exchange), "&");
         int candidateId = Integer.parseInt(parsedBody.get("candidateId"));
         if (isLogIn(exchange)) {
@@ -73,13 +90,18 @@ public class VoteMachine extends BasicServer {
             if (emails.contains(currentProfile.getEmail())) { // если Содержиться маил в листе проголосовавщих
                 redirect303(exchange, "alreadyVoted.html");
             } else {
+                Candidate candidate = null;
                 for (int i = 0; i < candidatesDataModel.getCandidates().size(); i++) {
                     Candidate currentCandidate = candidatesDataModel.getCandidates().get(i);
                     if (currentCandidate.getId() == candidateId) {
+                        candidate = currentCandidate;
                         candidatesDataModel.setCurrentCandidate(currentCandidate);
                         currentCandidate.setVotes(currentCandidate.getVotes() + 1);
                         break;
                     }
+                }
+                if (candidate == null) {
+                    redirect303(exchange, "/wrongIdOfCandidate.html");
                 }
                 candidatesDataModel.getEmailsOfVotedProfiles().add(currentProfile.getEmail());
                 redirect303(exchange, "/thankyou");

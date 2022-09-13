@@ -5,6 +5,7 @@ public class Candidate {
     private String name;
     private String photo;
     private transient int votes;
+    private boolean top; // для выделения победителя
 
 
 
@@ -38,5 +39,13 @@ public class Candidate {
 
     public void setVotes(Integer votes) {
         this.votes = votes;
+    }
+
+    public boolean isTop() {
+        return top;
+    }
+
+    public void setTop(boolean top) {
+        this.top = top;
     }
 }

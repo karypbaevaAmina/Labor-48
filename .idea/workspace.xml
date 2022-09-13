@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cbdb8d47-eaa9-4f9e-b612-bdef5d292e43" name="Changes" comment="labor-48">
-      <change afterPath="$PROJECT_DIR$/data/alreadyVoted.html" afterDir="false" />
+    <list default="true" id="cbdb8d47-eaa9-4f9e-b612-bdef5d292e43" name="Changes" comment="init-1">
+      <change afterPath="$PROJECT_DIR$/data/loginWithWrongEnter.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/wrongIdOfCandidate.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/alreadyVoted.html" beforeDir="false" afterPath="$PROJECT_DIR$/data/alreadyVoted.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/thankyou.html" beforeDir="false" afterPath="$PROJECT_DIR$/data/thankyou.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/votes.html" beforeDir="false" afterPath="$PROJECT_DIR$/data/votes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/wrongLogin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/VoteMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/VoteMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/server/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/Candidate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/Candidate.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/Intelij (Java)/Labor-48",
+    "last_opened_file_path": "D:/Intelij (Java)/Labor-48/data/4.jpeg",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
@@ -78,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1662996122836</updated>
-      <workItem from="1662996125528" duration="15479000" />
+      <workItem from="1662996125528" duration="20998000" />
     </task>
     <task id="LOCAL-00001" summary="labor-48">
       <created>1663051687493</created>
@@ -87,7 +96,21 @@
       <option name="project" value="LOCAL" />
       <updated>1663051687493</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="init-1">
+      <created>1663052156454</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1663052156454</updated>
+    </task>
+    <task id="LOCAL-00003" summary="init-1">
+      <created>1663052224379</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1663052224379</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,7 +129,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="labor-48" />
-    <option name="LAST_COMMIT_MESSAGE" value="labor-48" />
+    <MESSAGE value="init-1" />
+    <option name="LAST_COMMIT_MESSAGE" value="init-1" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
